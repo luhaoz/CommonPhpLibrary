@@ -1,7 +1,9 @@
 {
   "name": "luhaoz/common-php-library",
   "description": "luhaoz is php library",
+  "keywords": ["luhaoz", "CPL"],
   "type": "library",
+  "license": "MIT",
   "authors": [
     {
       "name": "luhaoz",
