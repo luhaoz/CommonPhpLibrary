@@ -1,6 +1,7 @@
 {
   "name": "luhaoz/common-php-library",
   "description": "luhaoz is php library",
+  "minimum-stability":"v0.01",
   "keywords": [
     "luhaoz",
     "CPL"
