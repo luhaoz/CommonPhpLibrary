@@ -20,7 +20,6 @@ use luhaoz\cpl\prototype\traits\Prototype;
  */
 class PluginManager
 {
-    use Prototype;
     protected $_pluginPool = null;
     protected $_owner = null;
 

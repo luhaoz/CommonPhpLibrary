@@ -21,7 +21,6 @@ use luhaoz\cpl\prototype\traits\Prototype;
  */
 class MethodManager
 {
-    use Prototype;
     protected $_methodPool = null;
     protected $_owner = null;
 
