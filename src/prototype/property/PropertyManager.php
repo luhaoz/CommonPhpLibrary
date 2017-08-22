@@ -21,7 +21,6 @@ use luhaoz\cpl\prototype\traits\Prototype;
  */
 class PropertyManager implements \IteratorAggregate
 {
-    use Prototype;
     protected $_propertyPool = null;
     protected $_owner = null;
 
