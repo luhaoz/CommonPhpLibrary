@@ -1,7 +1,10 @@
 {
   "name": "luhaoz/common-php-library",
   "description": "luhaoz is php library",
-  "keywords": ["luhaoz", "CPL"],
+  "keywords": [
+    "luhaoz",
+    "CPL"
+  ],
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -12,7 +15,7 @@
   ],
   "require": {
     "php": ">=5.4.0",
-    "ramsey/uuid": "^3.7",
+    "ramsey/uuid": "^3.7"
   },
   "autoload": {
     "psr-4": {
