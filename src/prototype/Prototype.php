@@ -9,11 +9,11 @@
 
 namespace luhaoz\cpl\prototype;
 
-use luhaoz\cpl\container\traits\ContainerManager;
-use luhaoz\cpl\dependence\Dependence;
+use luhaoz\cpl\event\traits\Event;
 use luhaoz\cpl\prototype\method\MethodManager;
 use luhaoz\cpl\prototype\plugin\PluginManager;
 use luhaoz\cpl\prototype\property\PropertyManager;
+use luhaoz\cpl\pubsub\traits\PubSub;
 
 /**
  * Class Prototype
@@ -21,26 +21,14 @@ use luhaoz\cpl\prototype\property\PropertyManager;
  */
 class Prototype
 {
+    use \luhaoz\cpl\prototype\traits\Prototype;
+    use PubSub;
+    use Event;
     protected $_owner = null;
     protected $_reflection = null;
-
-    use ContainerManager;
-    public $dependenceMapper = [];
-
-    public function containerMapper()
-    {
-        return array_merge([
-            'property' => Dependence::dependenceMapper(PropertyManager::class, [
-                '::owner' => [$this->owner()],
-            ]),
-            'method'   => Dependence::dependenceMapper(MethodManager::class, [
-                '::owner' => [$this->owner()],
-            ]),
-            'plugin'   => Dependence::dependenceMapper(PluginManager::class, [
-                '::owner' => [$this->owner()],
-            ]),
-        ], $this->dependenceMapper);
-    }
+    protected $_propertyManager = null;
+    protected $_methodManager = null;
+    protected $_pluginManager = null;
 
     public function owner($owner = null)
     {
@@ -61,12 +49,17 @@ class Prototype
         return $this->_reflection;
     }
 
+
     /**
      * @return PropertyManager
      */
     public function propertys()
     {
-        return $this->containerManager()->container('property');
+        if ($this->_propertyManager === null) {
+            $this->_propertyManager = new PropertyManager();
+            $this->_propertyManager->owner($this->owner());
+        }
+        return $this->_propertyManager;
     }
 
     /**
@@ -74,7 +67,11 @@ class Prototype
      */
     public function methods()
     {
-        return $this->containerManager()->container('method');
+        if ($this->_methodManager === null) {
+            $this->_methodManager = new MethodManager();
+            $this->_methodManager->owner($this->owner());
+        }
+        return $this->_methodManager;
     }
 
     /**
@@ -82,6 +79,10 @@ class Prototype
      */
     public function plugins()
     {
-        return $this->containerManager()->container('plugin');
+        if ($this->_pluginManager === null) {
+            $this->_pluginManager = new PluginManager();
+            $this->_pluginManager->owner($this->owner());
+        }
+        return $this->_pluginManager;
     }
 }

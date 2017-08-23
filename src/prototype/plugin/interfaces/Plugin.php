@@ -9,4 +9,5 @@ interface Plugin
 {
 
     public function owner($owner = null);
+    public function install($config = null);
 }

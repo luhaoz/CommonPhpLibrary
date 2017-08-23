@@ -19,13 +19,16 @@ trait Prototype
 {
     protected $_prototype = null;
 
+    /**
+     * @return \luhaoz\cpl\prototype\Prototype
+     */
     public function prototype()
     {
         if ($this->_prototype === null) {
-
             $this->_prototype = Dependence::instantiate(Dependence::dependenceMapper(\luhaoz\cpl\prototype\Prototype::class, [
                 '::owner' => [$this],
             ]));
+
             $prototype = $this->_constructed($this->_prototype);
             if ($prototype !== null) {
                 $this->_prototype = $prototype;

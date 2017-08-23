@@ -10,6 +10,7 @@ namespace luhaoz\cpl\prototype\property;
 
 use luhaoz\cpl\dependence\Dependence;
 use luhaoz\cpl\dependence\DependencePool;
+use luhaoz\cpl\prototype\method\types\Call;
 use luhaoz\cpl\prototype\property\base\BaseProperty;
 use luhaoz\cpl\prototype\property\types\Native;
 use luhaoz\cpl\prototype\property\types\Value;
@@ -21,6 +22,7 @@ use luhaoz\cpl\prototype\traits\Prototype;
  */
 class PropertyManager implements \IteratorAggregate
 {
+    use Prototype;
     protected $_propertyPool = null;
     protected $_owner = null;
 
@@ -43,11 +45,18 @@ class PropertyManager implements \IteratorAggregate
     {
         if ($this->_propertyPool === null) {
             $this->_propertyPool = new DependencePool();
-            $this->_propertyPool->events()->on(DependencePool::EVENT_DEPENDENCE_INSTANTIATE, function (BaseProperty $property, $config) {
-                $property->owner($this->owner());
-                $property->name = 1;
-                $property->meta = $config;
+            $this->_propertyPool->events()->on(DependencePool::EVENT_DEPENDENCE_CONFIG, function ($config) {
+                $config['__hook.instantiate'] = function (BaseProperty $instance) use ($config) {
+                    $instance->owner($this->owner());
+                    $instance->name = $config['dependence_name'];
+                    $instance->meta = $config;
+                    if ($this->prototype()->pubSubs()->has('propertyInstantiate')) {
+                        $this->prototype()->pubSubs()->emit('propertyInstantiate', [$instance]);
+                    }
+                };
+                return $config;
             });
+
             $publicNatives = $this->owner()->prototype()->reflection()->getProperties(\ReflectionProperty::IS_PUBLIC);
             if (!empty($publicNatives)) {
                 foreach ($publicNatives as $publicNative) {
@@ -71,9 +80,7 @@ class PropertyManager implements \IteratorAggregate
 
     public function config($propertyName, $config)
     {
-        if (!$this->is($propertyName)) {
-            $this->propertyPool()->config($propertyName, $config);
-        }
+        $this->propertyPool()->config($propertyName, $config);
         return $this;
     }
 
@@ -108,6 +115,9 @@ class PropertyManager implements \IteratorAggregate
         return $values;
     }
 
+    /**
+     * @return BaseProperty[]
+     */
     public function propertysIterator()
     {
         foreach ($this->propertyPool()->dependencesIterator() as $propertyName => $property) {

@@ -29,9 +29,9 @@ class PubSub
 
     public function emit($name, $parameter = [])
     {
-        $subscribers = $this->pubSubPool()->all();
+        $subscribers = $this->pubSubPool()->get($name)->all();
         foreach ($subscribers as $subscriber) {
-            call_user_func_array($subscribers, $parameter);
+            call_user_func_array($subscriber, $parameter);
         }
     }
 

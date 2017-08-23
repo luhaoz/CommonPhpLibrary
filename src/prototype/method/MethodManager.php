@@ -11,7 +11,7 @@ namespace luhaoz\cpl\prototype\method;
 use luhaoz\cpl\dependence\Dependence;
 use luhaoz\cpl\dependence\DependencePool;
 use luhaoz\cpl\prototype\method\base\BaseMethod;
-use luhaoz\cpl\prototype\method\types\CallMethod;
+use luhaoz\cpl\prototype\method\types\Call;
 use luhaoz\cpl\prototype\method\types\Native;
 use luhaoz\cpl\prototype\traits\Prototype;
 
@@ -21,6 +21,7 @@ use luhaoz\cpl\prototype\traits\Prototype;
  */
 class MethodManager
 {
+    use Prototype;
     protected $_methodPool = null;
     protected $_owner = null;
 
@@ -41,9 +42,14 @@ class MethodManager
     {
         if ($this->_methodPool === null) {
             $this->_methodPool = new DependencePool();
-            $this->_methodPool->events()->on(DependencePool::EVENT_DEPENDENCE_INSTANTIATE, function (BaseMethod $method, $config) {
-                $method->owner($this->owner());
+
+            $this->_methodPool->events()->on(DependencePool::EVENT_DEPENDENCE_CONFIG, function ($config) {
+                $config['__hook.instantiate'] = function (BaseMethod $instance) use ($config) {
+                    $instance->owner($this->owner());
+                };
+                return $config;
             });
+
             $publicNatives = $this->owner()->prototype()->reflection()->getMethods(\ReflectionMethod::IS_PUBLIC);
             if (!empty($publicNatives)) {
                 foreach ($publicNatives as $publicNative) {
@@ -61,7 +67,7 @@ class MethodManager
 
     /**
      * @param $name
-     * @return CallMethod
+     * @return Call
      */
     public function method($name)
     {
@@ -70,9 +76,7 @@ class MethodManager
 
     public function config($methodName, $config)
     {
-        if (!$this->is($methodName)) {
-            $this->methodPool()->config($methodName, $config);
-        }
+        $this->methodPool()->config($methodName, $config);
         return $this;
     }
 

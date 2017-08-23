@@ -10,13 +10,16 @@ namespace luhaoz\cpl\dependence;
 
 use luhaoz\cpl\event\traits\Event;
 use luhaoz\cpl\pool\HashPool;
+use luhaoz\cpl\prototype\traits\Prototype;
 use luhaoz\cpl\pubsub\traits\PubSub;
 
 class DependencePool
 {
+    use Prototype;
     use Event;
     use PubSub;
     const EVENT_DEPENDENCE_INSTANTIATE = 'dependence.instantiate';
+    const EVENT_DEPENDENCE_CONFIG = 'dependence.config';
 
 
     protected $_dependencePool;
@@ -67,6 +70,9 @@ class DependencePool
             if ($this->is($name)) {
                 $config = $this->config($name);
                 $config['dependence_name'] = $name;
+                if ($this->events()->has(static::EVENT_DEPENDENCE_CONFIG)) {
+                    $config = $this->events()->trigger(static::EVENT_DEPENDENCE_CONFIG, [$config]);
+                }
                 $instance = Dependence::instantiate($config);
                 $this->events()->trigger(static::EVENT_DEPENDENCE_INSTANTIATE, [$instance, $config]);
                 $this->dependencePool()->set($name, $instance);

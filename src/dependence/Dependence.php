@@ -8,6 +8,8 @@
 
 namespace luhaoz\cpl\dependence;
 
+use luhaoz\cpl\prototype\property\types\Value;
+
 class Dependence
 {
 
@@ -44,6 +46,11 @@ class Dependence
         $reflection = new \ReflectionClass($dependenceClassName);
 
         $instance = $reflection->newInstance();
+        if (array_key_exists('__hook.instantiate', $dependenceConfig)) {
+            call_user_func_array($dependenceConfig['__hook.instantiate'], [$instance]);
+        }
+
+
         if ($reflection->hasMethod(static::DEPENDENCE_INITIALIZE_METHOD)) {
             call_user_func_array([$instance, static::DEPENDENCE_INITIALIZE_METHOD], [$dependenceConfig]);
         }
@@ -79,7 +86,6 @@ class Dependence
                 $reflection->getProperty($dependenceInitAttribute)->setValue($instance, $dependenceInitValue);
                 continue;
             }
-
 
             if ($reflection->hasMethod('__property_exists') && $reflection->getMethod('__property_exists')->invokeArgs($instance, [$dependenceInitAttribute])) {
                 $instance->{$dependenceInitAttribute} = $dependenceInitValue;

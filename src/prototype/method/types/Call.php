@@ -12,5 +12,4 @@ use luhaoz\cpl\prototype\method\base\BaseMethod;
 
 class Call extends BaseMethod
 {
-
 }
