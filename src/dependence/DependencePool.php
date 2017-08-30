@@ -15,7 +15,6 @@ use luhaoz\cpl\pubsub\traits\PubSub;
 
 class DependencePool
 {
-    use Prototype;
     use Event;
     use PubSub;
     const EVENT_DEPENDENCE_INSTANTIATE = 'dependence.instantiate';

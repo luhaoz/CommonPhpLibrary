@@ -19,6 +19,7 @@ trait Prototype
 {
     protected $_prototype = null;
 
+
     /**
      * @return \luhaoz\cpl\prototype\Prototype
      */
@@ -47,26 +48,26 @@ trait Prototype
 
     public function __set($name, $value)
     {
-        return $this->prototype()->propertys()->property($name)->set($value);
+        return $this->prototype()->behaviors()->behavior(__FUNCTION__)->run(func_get_args());
     }
 
     public function __get($name)
     {
-        return $this->prototype()->propertys()->property($name)->get();
+        return $this->prototype()->behaviors()->behavior(__FUNCTION__)->run(func_get_args());
     }
 
     public function __call($name, $arguments)
     {
-        return $this->prototype()->methods()->method($name)->callArray($arguments);
+        return $this->prototype()->behaviors()->behavior(__FUNCTION__)->run(func_get_args());
     }
 
     public function __property_exists($name)
     {
-        return $this->prototype()->propertys()->is($name);
+        return $this->prototype()->behaviors()->behavior(__FUNCTION__)->run(func_get_args());
     }
 
     public function __method_exists($name)
     {
-        return $this->prototype()->methods()->is($name);
+        return $this->prototype()->behaviors()->behavior(__FUNCTION__)->run(func_get_args());
     }
 }

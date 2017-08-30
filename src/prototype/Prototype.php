@@ -9,7 +9,10 @@
 
 namespace luhaoz\cpl\prototype;
 
+use luhaoz\cpl\dependence\Dependence;
 use luhaoz\cpl\event\traits\Event;
+use luhaoz\cpl\prototype\behavior\BehaviorManager;
+use luhaoz\cpl\prototype\behavior\types\Behavior;
 use luhaoz\cpl\prototype\method\MethodManager;
 use luhaoz\cpl\prototype\plugin\PluginManager;
 use luhaoz\cpl\prototype\property\PropertyManager;
@@ -29,6 +32,7 @@ class Prototype
     protected $_propertyManager = null;
     protected $_methodManager = null;
     protected $_pluginManager = null;
+    protected $_behaviorManager = null;
 
     public function owner($owner = null)
     {
@@ -84,5 +88,44 @@ class Prototype
             $this->_pluginManager->owner($this->owner());
         }
         return $this->_pluginManager;
+    }
+
+    /**
+     * @return BehaviorManager
+     */
+    public function behaviors()
+    {
+        if ($this->_behaviorManager === null) {
+            $this->_behaviorManager = new BehaviorManager();
+            $this->_behaviorManager->owner($this->owner());
+            $this->_behaviorManager->configs([
+                '__set'             => Dependence::dependenceMapper(Behavior::class, [
+                    'behavior' => function ($name, $value) {
+                        return $this->prototype()->propertys()->property($name)->set($value);
+                    },
+                ]),
+                '__get'             => Dependence::dependenceMapper(Behavior::class, [
+                    'behavior' => function ($name) {
+                        return $this->prototype()->propertys()->property($name)->get();
+                    },
+                ]),
+                '__call'            => Dependence::dependenceMapper(Behavior::class, [
+                    'behavior' => function ($name, $arguments) {
+                        return $this->prototype()->methods()->method($name)->callArray($arguments);
+                    },
+                ]),
+                '__property_exists' => Dependence::dependenceMapper(Behavior::class, [
+                    'behavior' => function ($name) {
+                        return $this->prototype()->propertys()->is($name);
+                    },
+                ]),
+                '__method_exists'   => Dependence::dependenceMapper(Behavior::class, [
+                    'behavior' => function ($name) {
+                        return $this->prototype()->methods()->is($name);
+                    },
+                ]),
+            ]);
+        }
+        return $this->_behaviorManager;
     }
 }

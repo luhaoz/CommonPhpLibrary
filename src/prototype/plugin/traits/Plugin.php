@@ -2,7 +2,6 @@
 
 namespace luhaoz\cpl\prototype\plugin\traits;
 
-use luhaoz\cpl\dependence\Dependence;
 use luhaoz\cpl\prototype\traits\Prototype;
 
 /**
@@ -35,10 +34,7 @@ trait Plugin
         return $this->_config;
     }
 
-
-
     public function initialise()
     {
-        var_dump('q');
     }
 }

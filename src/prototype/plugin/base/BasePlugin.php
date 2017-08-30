@@ -20,7 +20,7 @@ class BasePlugin implements Plugin
     use Prototype;
     protected $_owner = null;
     protected $_config = null;
-
+    const PLUGIN_NAME = '';
     /**
      * @param null $owner
      * @return Prototype

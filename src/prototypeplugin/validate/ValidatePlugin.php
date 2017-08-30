@@ -22,6 +22,7 @@ use luhaoz\cpl\validate\ValidateResult;
  */
 class ValidatePlugin extends BasePlugin
 {
+    const PLUGIN_NAME = 'validate';
 
     /**
      * @param null $owner
@@ -42,20 +43,13 @@ class ValidatePlugin extends BasePlugin
 
     public function __propertyInstantiate(Value $property)
     {
-        $property->prototype()->propertys()->config('validator', Dependence::dependenceMapper(Value::class));
-        $property->prototype()->propertys()->config('__validator', Dependence::dependenceMapper(Value::class));
-        $property->prototype()->methods()->config('validate', Dependence::dependenceMapper(Method::class, [
-            '::method' => [[$this, '__propertyValidate']],
-        ]));
-        $property->prototype()->methods()->config('validator', Dependence::dependenceMapper(Method::class, [
-            '::method' => [[$this, '__propertyValidator']],
-        ]));
+        $property->prototype()->plugins()->setup(PropertyValidatePlugin::PLUGIN_NAME, Dependence::dependenceMapper(PropertyValidatePlugin::class));
     }
 
     public function __validate()
     {
         $validateResult = new ValidateResult();
-        $propertys = $this->propertysIterator();
+        $propertys = $this->memberIterator();
         foreach ($propertys as $property) {
             $propertyValidateResult = $property->validate();
             if (!$propertyValidateResult->valid()) {

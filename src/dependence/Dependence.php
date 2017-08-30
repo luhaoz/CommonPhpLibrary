@@ -29,6 +29,11 @@ class Dependence
         return $configMapper;
     }
 
+    public static function dependenceConfigValid($dependenceConfig)
+    {
+
+    }
+
     public static function getDependenceConfigClass($dependenceConfig)
     {
         if (array_key_exists(static::DEPENDENCE_CONFIG_CLASS_NAME_KEY, $dependenceConfig)) {

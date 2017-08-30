@@ -9,50 +9,19 @@
 namespace luhaoz\cpl\validate;
 
 use luhaoz\cpl\dependence\DependencePool;
-use luhaoz\cpl\error\traits\ErrorManager;
+use luhaoz\cpl\prototype\base\BaseManager;
 use luhaoz\cpl\prototype\traits\Prototype;
 use luhaoz\cpl\validate\base\BaseValidator;
 
 
-class ValidateManager
+class ValidateManager extends BaseManager
 {
-    use Prototype;
-    protected $_validatorPool = null;
-
-    public function validatorPool()
+    protected function buildContainer()
     {
-        if ($this->_validatorPool === null) {
-            $this->_validatorPool = new DependencePool();
-            $this->_validatorPool->events()->on(DependencePool::EVENT_DEPENDENCE_INSTANTIATE, function ($property, $config) {
-
-            });
-        }
-        return $this->_validatorPool;
+        $buildContainer = parent::buildContainer();
+        return $buildContainer;
     }
 
-    public function config($validateName, $config)
-    {
-        $this->validatorPool()->config($validateName, $config);
-        return $this;
-    }
-
-    public function configs($validates)
-    {
-        foreach ($validates as $validateName => $validate) {
-            $this->config($validateName, $validate);
-        }
-        return $this;
-    }
-
-    /**
-     * @return BaseValidator[]
-     */
-    public function validatorsIterator()
-    {
-        foreach ($this->validatorPool()->dependencesIterator() as $validatorName => $validator) {
-            yield $validatorName => $validator;
-        }
-    }
 
     /**
      * @param $data
@@ -61,7 +30,7 @@ class ValidateManager
     public function validate($data)
     {
         $validateResult = new ValidateResult();
-        foreach ($this->validatorsIterator() as $validatorName => $validator) {
+        foreach ($this->memberIterator() as $validatorName => $validator) {
             $validator->name = $validatorName;
             if (!$validator->validate($data)) {
                 $validateResult->errors()->add($validator->errors());
