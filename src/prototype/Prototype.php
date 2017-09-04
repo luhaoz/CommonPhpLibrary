@@ -17,6 +17,7 @@ use luhaoz\cpl\prototype\method\MethodManager;
 use luhaoz\cpl\prototype\plugin\PluginManager;
 use luhaoz\cpl\prototype\property\PropertyManager;
 use luhaoz\cpl\pubsub\traits\PubSub;
+use luhaoz\cpl\reflection\ReflectionClass;
 
 /**
  * Class Prototype
@@ -48,7 +49,7 @@ class Prototype
     public function reflection()
     {
         if ($this->_reflection === null) {
-            $this->_reflection = new \ReflectionClass(get_class($this->owner()));
+            $this->_reflection = new ReflectionClass(get_class($this->owner()));
         }
         return $this->_reflection;
     }

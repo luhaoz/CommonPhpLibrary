@@ -9,7 +9,7 @@
 namespace luhaoz\cpl\pubsub;
 
 use luhaoz\cpl\pool\HashPool;
-use Ramsey\Uuid\Uuid;
+use luhaoz\cpl\util\Util;
 
 class PubSub
 {
@@ -45,7 +45,7 @@ class PubSub
         if (!$this->pubSubPool()->has($name)) {
             $this->pubSubPool()->set($name, new HashPool());
         }
-        $this->pubSubPool()->get($name)->set(Uuid::uuid4()->toString(), $callBack);
+        $this->pubSubPool()->get($name)->set(Util::app()->generator->generate('uuid'), $callBack);
         return $this;
     }
 

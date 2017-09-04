@@ -24,6 +24,7 @@ use luhaoz\cpl\prototype\traits\Prototype;
  * @package luhaoz\cpl\prototype\property
  * @method \luhaoz\cpl\prototype\property\plugin\filter\base\BaseFilter filter(\luhaoz\cpl\prototype\property\plugin\filter\base\BaseFilter $filter)
  * @method array values($values = null)
+ * @method \Generator metas()
  */
 class PropertyManager extends BaseManager implements \IteratorAggregate
 {
@@ -82,6 +83,14 @@ class PropertyManager extends BaseManager implements \IteratorAggregate
                     }
                 }
                 return $values;
+            }],
+        ]));
+
+        $this->prototype()->methods()->config('metas', Dependence::dependenceMapper(Method::class, [
+            '::method' => [function () {
+                foreach ($this->memberIterator() as $propertyName => $property) {
+                    yield $propertyName => $property->meta;
+                }
             }],
         ]));
         $prototype->plugins()->setup(Filter::PLUGIN_NAME, Dependence::dependenceMapper(Filter::class));

@@ -11,6 +11,7 @@ namespace luhaoz\cpl\api\base;
 use luhaoz\cpl\dependence\Dependence;
 use luhaoz\cpl\prototype\property\types\Value;
 use luhaoz\cpl\prototype\traits\Prototype;
+use luhaoz\cpl\reflection\ReflectionClass;
 use luhaoz\cpl\util\Arrays;
 
 /**
@@ -23,13 +24,18 @@ class ApiDriver
     const META_REQUEST = 'request';
     const META_RESPONSE = 'response';
 
+    public static function meta()
+    {
+        $reflection = new ReflectionClass(static::class);
+        $q = $reflection->getMethods();
+        var_dump($q);
+//        $q = $reflection->getAnnotations()->toArray();
+//        var_dump($q);
+    }
+
     public function _constructed(\luhaoz\cpl\prototype\Prototype $prototype)
     {
         $prototype->plugins()->setups($this->_config());
-
-        $prototype->propertys()->config('method', Dependence::dependenceMapper(Value::class));
-        $prototype->propertys()->config('endpoint', Dependence::dependenceMapper(Value::class));
-
     }
 
     protected function _config()

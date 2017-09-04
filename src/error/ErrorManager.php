@@ -9,7 +9,7 @@
 namespace luhaoz\cpl\error;
 
 use luhaoz\cpl\pool\HashPool;
-use Ramsey\Uuid\Uuid;
+use luhaoz\cpl\util\Util;
 
 class ErrorManager implements \IteratorAggregate
 {
@@ -27,11 +27,11 @@ class ErrorManager implements \IteratorAggregate
     {
         if ($error instanceof static) {
             foreach ($error->errrosIterator() as $item) {
-                $this->errorPool()->set(Uuid::uuid4()->toString(), $item);
+                $this->errorPool()->set(Util::app()->generator->generate('uuid'), $item);
             }
             return $this;
         }
-        $this->errorPool()->set(Uuid::uuid4()->toString(), $error);
+        $this->errorPool()->set(Util::app()->generator->generate('uuid'), $error);
 
         return $this;
     }

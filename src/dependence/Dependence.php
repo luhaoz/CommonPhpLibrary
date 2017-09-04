@@ -9,6 +9,7 @@
 namespace luhaoz\cpl\dependence;
 
 use luhaoz\cpl\prototype\property\types\Value;
+use luhaoz\cpl\reflection\ReflectionClass;
 
 class Dependence
 {
@@ -48,7 +49,7 @@ class Dependence
     public static function instantiate($dependenceConfig)
     {
         $dependenceClassName = static::getDependenceConfigClass($dependenceConfig);
-        $reflection = new \ReflectionClass($dependenceClassName);
+        $reflection = new ReflectionClass($dependenceClassName);
 
         $instance = $reflection->newInstance();
         if (array_key_exists('__hook.instantiate', $dependenceConfig)) {
