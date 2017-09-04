@@ -28,6 +28,6 @@ class Error
 
     public function toData()
     {
-        return $this->prototype()->propertys()->values();
+        return $this->prototype()->properties()->values();
     }
 }

@@ -31,19 +31,19 @@ class Value extends BaseProperty
 
     public function _constructed(\luhaoz\cpl\prototype\Prototype $prototype)
     {
-        $prototype->propertys()->configs([
-            'name'     => Dependence::dependenceMapper(BaseProperty::class),
-            'meta'     => Dependence::dependenceMapper(BaseProperty::class),
-            '__modfiy' => Dependence::dependenceMapper(BaseProperty::class),
-            'default'  => Dependence::dependenceMapper(BaseProperty::class),
+        $prototype->properties()->configs([
+            'name'     => Dependence::dependenceConfig(BaseProperty::class),
+            'meta'     => Dependence::dependenceConfig(BaseProperty::class),
+            '__modfiy' => Dependence::dependenceConfig(BaseProperty::class),
+            'default'  => Dependence::dependenceConfig(BaseProperty::class),
         ]);
         $prototype->methods()->configs([
-            'isEmpty'  => Dependence::dependenceMapper(Method::class, [
+            'isEmpty'  => Dependence::dependenceConfig(Method::class, [
                 '::method' => [function () {
                     return $this->_data === null;
                 }],
             ]),
-            'isModify' => Dependence::dependenceMapper(Method::class, [
+            'isModify' => Dependence::dependenceConfig(Method::class, [
                 '::method' => [function () {
                     return $this->__modfiy == true;
                 }],

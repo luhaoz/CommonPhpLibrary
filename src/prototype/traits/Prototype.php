@@ -26,7 +26,7 @@ trait Prototype
     public function prototype()
     {
         if ($this->_prototype === null) {
-            $this->_prototype = Dependence::instantiate(Dependence::dependenceMapper(\luhaoz\cpl\prototype\Prototype::class, [
+            $this->_prototype = Dependence::instantiate(Dependence::dependenceConfig(\luhaoz\cpl\prototype\Prototype::class, [
                 '::owner' => [$this],
             ]));
 

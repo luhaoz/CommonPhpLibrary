@@ -28,14 +28,14 @@ class Util
     protected function utils()
     {
         return array_merge([
-            Generator::PLUGIN_NAME => Dependence::dependenceMapper(Generator::class),
+            Generator::PLUGIN_NAME => Dependence::dependenceConfig(Generator::class),
         ], $this->utils);
     }
 
     protected function _constructed(\luhaoz\cpl\prototype\Prototype $prototype)
     {
         $this->prototype()->plugins()->setups($this->utils());
-        $this->prototype()->behaviors()->config('__get', Dependence::dependenceMapper(Behavior::class, [
+        $this->prototype()->behaviors()->config('__get', Dependence::dependenceConfig(Behavior::class, [
             'behavior' => function ($name) {
                 return $this->prototype()->plugins()->plugin($name);
             },

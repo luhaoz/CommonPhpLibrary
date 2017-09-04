@@ -28,7 +28,7 @@ class BaseValidator
         $valid = boolval($this->valid($data));
         if (!$valid) {
             $error = new Error();
-            $error->prototype()->propertys()->config('type', Dependence::dependenceMapper(Value::class));
+            $error->prototype()->properties()->config('type', Dependence::dependenceConfig(Value::class));
             $error->type = static::VALIDATOR_NAME;
             $error->message = $this->message;
             $error->name = $this->name;

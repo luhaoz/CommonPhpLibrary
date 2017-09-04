@@ -16,7 +16,7 @@ class SetsRequest extends BaseRequest
 
     public function _constructed(\luhaoz\cpl\prototype\Prototype $prototype)
     {
-        $prototype->propertys()->configs([
+        $prototype->properties()->configs([
             'page'       => [Value::class, 'default' => 1],
             'page_count' => [Value::class, 'default' => 10],
         ]);

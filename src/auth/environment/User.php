@@ -24,12 +24,12 @@ class User extends BaseEnvironment
 
     public function _constructed(\luhaoz\cpl\prototype\Prototype $prototype)
     {
-        $prototype->propertys()->configs(array_merge([
-            'id' => Dependence::dependenceMapper(Value::class),
-        ], $this->propertys()));
+        $prototype->properties()->configs(array_merge([
+            'id' => Dependence::dependenceConfig(Value::class),
+        ], $this->properties()));
     }
 
-    protected function propertys()
+    protected function properties()
     {
         return [];
     }
@@ -41,7 +41,7 @@ class User extends BaseEnvironment
 
     public function set($value)
     {
-        return $this->prototype()->propertys()->values($value);
+        return $this->prototype()->properties()->values($value);
     }
 
     public function isGuest($isGuest = null)
@@ -57,7 +57,7 @@ class User extends BaseEnvironment
         $valid = $authenticator->valid();
         if ($valid) {
             $this->isGuest(false);
-            $this->prototype()->propertys()->values($authenticator->info());
+            $this->prototype()->properties()->values($authenticator->info());
             $this->id = $authenticator->getId();
         }
         return $valid;

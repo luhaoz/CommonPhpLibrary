@@ -19,7 +19,7 @@ class ErrorResponse extends BaseResponse
 {
     const RESPONSE_TYPE = 'error.list';
 
-    public function propertys()
+    public function properties()
     {
         return [
             'request_id' => [Value::class],

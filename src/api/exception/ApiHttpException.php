@@ -21,9 +21,9 @@ class ApiHttpException extends \Exception
 
     protected function _constructed(\luhaoz\cpl\prototype\Prototype $prototype)
     {
-        $prototype->propertys()->configs([
-            'data'       => Dependence::dependenceMapper(Value::class),
-            'statusCode' => Dependence::dependenceMapper(Value::class),
+        $prototype->properties()->configs([
+            'data'       => Dependence::dependenceConfig(Value::class),
+            'statusCode' => Dependence::dependenceConfig(Value::class),
         ]);
     }
 

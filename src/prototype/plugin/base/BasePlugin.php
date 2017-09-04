@@ -35,10 +35,10 @@ class BasePlugin implements Plugin
 
     public function install($config = [])
     {
-        if (array_key_exists('propertys', $config)) {
-            foreach ($config['propertys'] as $pluginPropertyName => $property) {
-                $pluginProperty = $this->prototype()->propertys()->property($pluginPropertyName);
-                $this->owner()->prototype()->propertys()->config($property, Dependence::dependenceMapper(\luhaoz\cpl\prototype\property\types\Junctor::class, [
+        if (array_key_exists('properties', $config)) {
+            foreach ($config['properties'] as $pluginPropertyName => $property) {
+                $pluginProperty = $this->prototype()->properties()->property($pluginPropertyName);
+                $this->owner()->prototype()->properties()->config($property, Dependence::dependenceConfig(\luhaoz\cpl\prototype\property\types\Junctor::class, [
                     '::junctorInstance' => [$pluginProperty],
                 ]));
             }
@@ -47,7 +47,7 @@ class BasePlugin implements Plugin
         if (array_key_exists('methods', $config)) {
             foreach ($config['methods'] as $pluginMethodName => $method) {
                 $pluginMethod = $this->prototype()->methods()->method($pluginMethodName);
-                $this->owner()->prototype()->methods()->config($method, Dependence::dependenceMapper(\luhaoz\cpl\prototype\method\types\Junctor::class, [
+                $this->owner()->prototype()->methods()->config($method, Dependence::dependenceConfig(\luhaoz\cpl\prototype\method\types\Junctor::class, [
                     '::junctorInstance' => [$pluginMethod],
                 ]));
             }

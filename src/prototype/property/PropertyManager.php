@@ -46,7 +46,7 @@ class PropertyManager extends BaseManager implements \IteratorAggregate
         $publicNatives = $this->owner()->prototype()->reflection()->getProperties(\ReflectionProperty::IS_PUBLIC);
         if (!empty($publicNatives)) {
             foreach ($publicNatives as $publicNative) {
-                $container->config($publicNative->getName(), Dependence::dependenceMapper(Native::class, [
+                $container->config($publicNative->getName(), Dependence::dependenceConfig(Native::class, [
                     '::nativeInstance' => [$publicNative],
                 ]));
             }
@@ -67,7 +67,7 @@ class PropertyManager extends BaseManager implements \IteratorAggregate
 
     public function _constructed(\luhaoz\cpl\prototype\Prototype $prototype)
     {
-        $this->prototype()->methods()->config('values', Dependence::dependenceMapper(Method::class, [
+        $this->prototype()->methods()->config('values', Dependence::dependenceConfig(Method::class, [
             '::method' => [function ($values = null) {
                 if (!empty($values) && is_array($values)) {
                     foreach ($values as $propertyName => $propertyValue) {
@@ -86,14 +86,14 @@ class PropertyManager extends BaseManager implements \IteratorAggregate
             }],
         ]));
 
-        $this->prototype()->methods()->config('metas', Dependence::dependenceMapper(Method::class, [
+        $this->prototype()->methods()->config('metas', Dependence::dependenceConfig(Method::class, [
             '::method' => [function () {
                 foreach ($this->memberIterator() as $propertyName => $property) {
                     yield $propertyName => $property->meta;
                 }
             }],
         ]));
-        $prototype->plugins()->setup(Filter::PLUGIN_NAME, Dependence::dependenceMapper(Filter::class));
+        $prototype->plugins()->setup(Filter::PLUGIN_NAME, Dependence::dependenceConfig(Filter::class));
     }
 
     /**

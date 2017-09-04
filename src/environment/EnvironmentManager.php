@@ -18,11 +18,11 @@ class EnvironmentManager
 
     protected function _constructed(\luhaoz\cpl\prototype\Prototype $prototype)
     {
-        $prototype->propertys()->configs($this->environments);
+        $prototype->properties()->configs($this->environments);
     }
 
     public function environment($environmentName)
     {
-        return $this->prototype()->propertys()->property($environmentName);
+        return $this->prototype()->properties()->property($environmentName);
     }
 }

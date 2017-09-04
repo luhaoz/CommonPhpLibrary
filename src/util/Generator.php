@@ -26,27 +26,27 @@ class Generator extends BasePlugin
     public function generators()
     {
         return array_merge([
-            'time'        => Dependence::dependenceMapper(GeneralGenerator::class, [
+            'time'        => Dependence::dependenceConfig(GeneralGenerator::class, [
                 'generate' => function () {
                     return time();
                 },
             ]),
-            'date'        => Dependence::dependenceMapper(GeneralGenerator::class, [
+            'date'        => Dependence::dependenceConfig(GeneralGenerator::class, [
                 'generate' => function ($formate = 'Y-m-d H:i:s') {
                     return date($formate, time());
                 },
             ]),
-            'microtime'   => Dependence::dependenceMapper(GeneralGenerator::class, [
+            'microtime'   => Dependence::dependenceConfig(GeneralGenerator::class, [
                 'generate' => function () {
                     return microtime(true);
                 },
             ]),
-            'uuid'        => Dependence::dependenceMapper(GeneralGenerator::class, [
+            'uuid'        => Dependence::dependenceConfig(GeneralGenerator::class, [
                 'generate' => function () {
                     return Uuid::uuid4()->toString();
                 },
             ]),
-            'primary_key' => Dependence::dependenceMapper(GeneralGenerator::class, [
+            'primary_key' => Dependence::dependenceConfig(GeneralGenerator::class, [
                 'generate' => function () {
                     return strtoupper(md5(Uuid::uuid4()->toString() . '_' . rand(1, rand(1, 1000)) . '_' . microtime(true)));
                 },

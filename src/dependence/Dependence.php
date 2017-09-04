@@ -19,7 +19,7 @@ class Dependence
     const DEPENDENCE_INITIALIZE_METHOD = '__initialize';
     const DEPENDENCE_CONFIG_INITIALIZE_KEY = '__initialize';
 
-    public static function dependenceMapper($class, $config = [])
+    public static function dependenceConfig($class, $config = [])
     {
         $configMapper = [
             static::DEPENDENCE_CONFIG_CLASS_NAME_KEY => $class,

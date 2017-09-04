@@ -16,6 +16,6 @@ class Response extends BasePlugin
 
     public function _constructed(\luhaoz\cpl\prototype\Prototype $prototype)
     {
-        $prototype->propertys()->configs($this->parameter);
+        $prototype->properties()->configs($this->parameter);
     }
 }

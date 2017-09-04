@@ -44,7 +44,7 @@ class Prototype
     }
 
     /**
-     * @return \ReflectionClass
+     * @return ReflectionClass
      */
     public function reflection()
     {
@@ -58,7 +58,7 @@ class Prototype
     /**
      * @return PropertyManager
      */
-    public function propertys()
+    public function properties()
     {
         if ($this->_propertyManager === null) {
             $this->_propertyManager = new PropertyManager();
@@ -100,27 +100,27 @@ class Prototype
             $this->_behaviorManager = new BehaviorManager();
             $this->_behaviorManager->owner($this->owner());
             $this->_behaviorManager->configs([
-                '__set'             => Dependence::dependenceMapper(Behavior::class, [
+                '__set'             => Dependence::dependenceConfig(Behavior::class, [
                     'behavior' => function ($name, $value) {
-                        return $this->prototype()->propertys()->property($name)->set($value);
+                        return $this->prototype()->properties()->property($name)->set($value);
                     },
                 ]),
-                '__get'             => Dependence::dependenceMapper(Behavior::class, [
+                '__get'             => Dependence::dependenceConfig(Behavior::class, [
                     'behavior' => function ($name) {
-                        return $this->prototype()->propertys()->property($name)->get();
+                        return $this->prototype()->properties()->property($name)->get();
                     },
                 ]),
-                '__call'            => Dependence::dependenceMapper(Behavior::class, [
+                '__call'            => Dependence::dependenceConfig(Behavior::class, [
                     'behavior' => function ($name, $arguments) {
                         return $this->prototype()->methods()->method($name)->callArray($arguments);
                     },
                 ]),
-                '__property_exists' => Dependence::dependenceMapper(Behavior::class, [
+                '__property_exists' => Dependence::dependenceConfig(Behavior::class, [
                     'behavior' => function ($name) {
-                        return $this->prototype()->propertys()->is($name);
+                        return $this->prototype()->properties()->is($name);
                     },
                 ]),
-                '__method_exists'   => Dependence::dependenceMapper(Behavior::class, [
+                '__method_exists'   => Dependence::dependenceConfig(Behavior::class, [
                     'behavior' => function ($name) {
                         return $this->prototype()->methods()->is($name);
                     },

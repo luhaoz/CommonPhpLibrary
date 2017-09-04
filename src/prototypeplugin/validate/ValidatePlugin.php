@@ -36,27 +36,27 @@ class ValidatePlugin extends BasePlugin
     public function initialise()
     {
         $this->owner()->prototype()->pubSubs()->on('propertyInstantiate', [$this, '__propertyInstantiate']);
-        $this->owner()->prototype()->methods()->config('validate', Dependence::dependenceMapper(Method::class, [
+        $this->owner()->prototype()->methods()->config('validate', Dependence::dependenceConfig(Method::class, [
             '::method' => [[$this, '__validate']],
         ]));
     }
 
     public function __propertyInstantiate(Value $property)
     {
-        $property->prototype()->plugins()->setup(PropertyValidatePlugin::PLUGIN_NAME, Dependence::dependenceMapper(PropertyValidatePlugin::class));
+        $property->prototype()->plugins()->setup(PropertyValidatePlugin::PLUGIN_NAME, Dependence::dependenceConfig(PropertyValidatePlugin::class));
     }
 
     public function __validate()
     {
         $validateResult = new ValidateResult();
-        $propertys = $this->memberIterator();
-        foreach ($propertys as $property) {
+        $properties = $this->memberIterator();
+        foreach ($properties as $property) {
             $propertyValidateResult = $property->validate();
             if (!$propertyValidateResult->valid()) {
                 $validateResult->valid(false);
                 foreach ($propertyValidateResult->errors() as $error) {
                     if ($error instanceof Error) {
-                        $error->prototype()->propertys()->config('property', Dependence::dependenceMapper(Value::class));
+                        $error->prototype()->properties()->config('property', Dependence::dependenceConfig(Value::class));
                         $error->property = $property->name;
                     }
                     $validateResult->errors()->add($error);

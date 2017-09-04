@@ -38,7 +38,7 @@ class MethodManager extends BaseManager
                 if (in_array($publicNative->getName(), ['__set', '__get', '__call', '__property_exists', '__method_exists', '_constructed', 'prototype'])) {
                     continue;
                 }
-                $container->config($publicNative->getName(), Dependence::dependenceMapper(Native::class, [
+                $container->config($publicNative->getName(), Dependence::dependenceConfig(Native::class, [
                     '::nativeInstance' => [$publicNative],
                 ]));
             }

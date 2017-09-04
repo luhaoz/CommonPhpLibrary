@@ -33,17 +33,17 @@ class PropertyValidatePlugin extends BasePlugin
 
     public function initialise()
     {
-        $this->owner()->prototype()->propertys()->config('validator', Dependence::dependenceMapper(Value::class, [
+        $this->owner()->prototype()->properties()->config('validator', Dependence::dependenceConfig(Value::class, [
             'default' => [],
         ]));
-        $this->owner()->prototype()->propertys()->config('__validator', Dependence::dependenceMapper(Value::class));
-        $this->owner()->prototype()->methods()->config('validate', Dependence::dependenceMapper(Method::class, [
+        $this->owner()->prototype()->properties()->config('__validator', Dependence::dependenceConfig(Value::class));
+        $this->owner()->prototype()->methods()->config('validate', Dependence::dependenceConfig(Method::class, [
             '::method' => [[$this, '__propertyValidate']],
         ]));
-        $this->owner()->prototype()->methods()->config('validator', Dependence::dependenceMapper(Method::class, [
+        $this->owner()->prototype()->methods()->config('validator', Dependence::dependenceConfig(Method::class, [
             '::method' => [[$this, '__propertyValidator']],
         ]));
-        $this->owner()->prototype()->methods()->config('validateData', Dependence::dependenceMapper(Method::class, [
+        $this->owner()->prototype()->methods()->config('validateData', Dependence::dependenceConfig(Method::class, [
             '::method' => [[$this, '__propertyValidateData']],
         ]));
     }

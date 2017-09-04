@@ -52,7 +52,7 @@ class MagicMethodEngine
     public function containerMapper()
     {
         return [
-            ContainerPool::DEFAULT_CONTAINER_NAME => Dependence::dependenceMapper(DataPool::class),
+            ContainerPool::DEFAULT_CONTAINER_NAME => Dependence::dependenceConfig(DataPool::class),
         ];
     }
 

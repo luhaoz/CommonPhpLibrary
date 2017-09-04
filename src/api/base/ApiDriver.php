@@ -8,43 +8,44 @@
 
 namespace luhaoz\cpl\api\base;
 
+use luhaoz\cpl\api\plugin\ApiDoc;
 use luhaoz\cpl\dependence\Dependence;
 use luhaoz\cpl\prototype\property\types\Value;
 use luhaoz\cpl\prototype\traits\Prototype;
-use luhaoz\cpl\reflection\ReflectionClass;
+use luhaoz\cpl\traits\StaticInstance;
 use luhaoz\cpl\util\Arrays;
 
 /**
  * Class ApiDriver
  * @package luhaoz\cpl\api\base
+ * @property string $method
+ * @property string $endpoint
  */
 class ApiDriver
 {
     use Prototype;
+    use StaticInstance;
     const META_REQUEST = 'request';
     const META_RESPONSE = 'response';
 
-    public static function meta()
-    {
-        $reflection = new ReflectionClass(static::class);
-        $q = $reflection->getMethods();
-        var_dump($q);
-//        $q = $reflection->getAnnotations()->toArray();
-//        var_dump($q);
-    }
-
     public function _constructed(\luhaoz\cpl\prototype\Prototype $prototype)
     {
+        $prototype->properties()->configs([
+            'method'   => Dependence::dependenceConfig(Value::class),
+            'endpoint' => Dependence::dependenceConfig(Value::class),
+        ]);
         $prototype->plugins()->setups($this->_config());
+        $prototype->plugins()->setup(ApiDoc::PLUGIN_NAME, Dependence::dependenceConfig(ApiDoc::class));
+
     }
 
     protected function _config()
     {
         return Arrays::merge([
-            static::META_REQUEST  => Dependence::dependenceMapper(Request::class, [
+            static::META_REQUEST  => Dependence::dependenceConfig(Request::class, [
                 'parameter' => [],
             ]),
-            static::META_RESPONSE => Dependence::dependenceMapper(Response::class, [
+            static::META_RESPONSE => Dependence::dependenceConfig(Response::class, [
                 'parameter' => [],
             ]),
         ], $this->config());

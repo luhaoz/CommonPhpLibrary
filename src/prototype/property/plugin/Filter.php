@@ -34,11 +34,11 @@ class Filter extends BasePlugin
 
     public function initialise()
     {
-        $this->owner()->prototype()->propertys()->config('__filter', Dependence::dependenceMapper(Value::class));
-        $this->owner()->prototype()->methods()->config('filter', Dependence::dependenceMapper(Method::class, [
+        $this->owner()->prototype()->properties()->config('__filter', Dependence::dependenceConfig(Value::class));
+        $this->owner()->prototype()->methods()->config('filter', Dependence::dependenceConfig(Method::class, [
             '::method' => [[$this, '__filter']],
         ]));
-        $this->owner()->prototype()->methods()->config('values', Dependence::dependenceMapper(Method::class, [
+        $this->owner()->prototype()->methods()->config('values', Dependence::dependenceConfig(Method::class, [
             '::method' => [[$this, '__values']],
         ]));
     }
