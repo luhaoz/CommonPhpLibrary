@@ -26,7 +26,6 @@ class Dictionary
 
     public function import($dictionaryConfig)
     {
-        $dictionaryProperties = [];
         foreach ($dictionaryConfig as $dictionaryName => $dictionary) {
             $this->prototype()->properties()->config($dictionaryName, Dependence::dependenceConfig(Node::class, [
                 '::initValue' => [$dictionary],

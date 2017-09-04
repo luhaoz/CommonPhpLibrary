@@ -10,10 +10,13 @@ namespace luhaoz\cpl\api\plugin;
 
 use luhaoz\cpl\dependence\Dependence;
 use luhaoz\cpl\dictionary\Dictionary;
-use luhaoz\cpl\dictionary\types\Node;
 use luhaoz\cpl\prototype\plugin\base\BasePlugin;
 use luhaoz\cpl\prototype\property\types\Value;
 
+/**
+ * Class ApiDoc
+ * @package luhaoz\cpl\api\plugin
+ */
 class ApiDoc extends BasePlugin
 {
     const PLUGIN_NAME = 'apidoc';

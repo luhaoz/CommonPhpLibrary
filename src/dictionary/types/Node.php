@@ -14,9 +14,6 @@ use luhaoz\cpl\prototype\property\types\Value;
 
 class Node extends Value
 {
-
-    protected $_arrayPropertieConfig = [];
-
     public function get()
     {
         return $this;
