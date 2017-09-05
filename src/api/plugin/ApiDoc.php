@@ -55,29 +55,34 @@ class ApiDoc extends BasePlugin
 
     public function initialise()
     {
-        $api = $this->owner()->prototype()->reflection()->getAnnotations()->get('api');
-        if (is_array($api)) {
-            $api = array_shift($api);
-        }
-        $apiInfo = $this->getData($api);
-        if ($this->owner()->prototype()->properties()->property('endpoint')->isEmpty()) {
-            $this->owner()->prototype()->properties()->property('endpoint')->set($apiInfo[2]);
-        }
-        if ($this->owner()->prototype()->properties()->property('method')->isEmpty()) {
-            $this->owner()->prototype()->properties()->property('method')->set($apiInfo[1]);
-        }
-        $apiParams = $this->owner()->prototype()->reflection()->getAnnotations()->get('apiParam');
-        if (!is_array($apiParams)) {
-            $apiParams = [$apiParams];
-        }
-        foreach ($apiParams as $apiParam) {
-            $apiParamInfo = $this->getData($apiParam);
-            if (!$this->paramDictionary()->consult($apiParamInfo[1])->isEmpty()) {
-                $config = $this->paramDictionary()->consult($apiParamInfo[1])->value();
-            } else {
-                $config = Dependence::dependenceConfig(Value::class);
+        if ($this->owner()->prototype()->reflection()->getAnnotations()->has('api')) {
+            $api = $this->owner()->prototype()->reflection()->getAnnotations()->get('api');
+            if (is_array($api)) {
+                $api = array_shift($api);
             }
-            $this->owner()->request()->prototype()->properties()->config($apiParamInfo[2], $config);
+            $apiInfo = $this->getData($api);
+            if ($this->owner()->prototype()->properties()->property('endpoint')->isEmpty()) {
+                $this->owner()->prototype()->properties()->property('endpoint')->set($apiInfo[2]);
+            }
+            if ($this->owner()->prototype()->properties()->property('method')->isEmpty()) {
+                $this->owner()->prototype()->properties()->property('method')->set($apiInfo[1]);
+            }
         }
+        if ($this->owner()->prototype()->reflection()->getAnnotations()->has('apiParam')) {
+            $apiParams = $this->owner()->prototype()->reflection()->getAnnotations()->get('apiParam');
+            if (!is_array($apiParams)) {
+                $apiParams = [$apiParams];
+            }
+            foreach ($apiParams as $apiParam) {
+                $apiParamInfo = $this->getData($apiParam);
+                if (!$this->paramDictionary()->consult($apiParamInfo[1])->isEmpty()) {
+                    $config = $this->paramDictionary()->consult($apiParamInfo[1])->value();
+                } else {
+                    $config = Dependence::dependenceConfig(Value::class);
+                }
+                $this->owner()->request()->prototype()->properties()->config($apiParamInfo[2], $config);
+            }
+        }
+
     }
 }
