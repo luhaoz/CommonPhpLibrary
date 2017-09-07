@@ -58,8 +58,12 @@ class Prototype
     /**
      * @return PropertyManager
      */
-    public function properties()
+    public function properties($properties = null)
     {
+        if ($properties instanceof PropertyManager) {
+            $this->_propertyManager = $properties;
+        }
+
         if ($this->_propertyManager === null) {
             $this->_propertyManager = new PropertyManager();
             $this->_propertyManager->owner($this->owner());
@@ -70,8 +74,11 @@ class Prototype
     /**
      * @return MethodManager
      */
-    public function methods()
+    public function methods($methods = null)
     {
+        if ($methods instanceof MethodManager) {
+            $this->_methodManager = $methods;
+        }
         if ($this->_methodManager === null) {
             $this->_methodManager = new MethodManager();
             $this->_methodManager->owner($this->owner());
@@ -82,8 +89,11 @@ class Prototype
     /**
      * @return PluginManager
      */
-    public function plugins()
+    public function plugins($plugins = null)
     {
+        if ($plugins instanceof PluginManager) {
+            $this->_pluginManager = $plugins;
+        }
         if ($this->_pluginManager === null) {
             $this->_pluginManager = new PluginManager();
             $this->_pluginManager->owner($this->owner());
@@ -94,8 +104,11 @@ class Prototype
     /**
      * @return BehaviorManager
      */
-    public function behaviors()
+    public function behaviors($behaviors = null)
     {
+        if ($behaviors instanceof BehaviorManager) {
+            $this->_behaviorManager = $behaviors;
+        }
         if ($this->_behaviorManager === null) {
             $this->_behaviorManager = new BehaviorManager();
             $this->_behaviorManager->owner($this->owner());

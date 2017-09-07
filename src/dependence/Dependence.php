@@ -32,7 +32,19 @@ class Dependence
 
     public static function dependenceConfigValid($dependenceConfig)
     {
+        if (!is_array($dependenceConfig)) {
+            return false;
+        }
 
+        if (!array_key_exists(static::DEPENDENCE_CONFIG_CLASS_NAME_KEY, $dependenceConfig)) {
+            return false;
+        }
+
+//        if (!array_key_exists(static::DEPENDENCE_CONFIG_CLASS_NAME_INDEX, $dependenceConfig)) {
+//            return false;
+//        }
+
+        return true;
     }
 
     public static function getDependenceConfigClass($dependenceConfig)

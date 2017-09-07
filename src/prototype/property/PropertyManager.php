@@ -11,13 +11,13 @@ namespace luhaoz\cpl\prototype\property;
 use luhaoz\cpl\dependence\Dependence;
 use luhaoz\cpl\dependence\DependencePool;
 use luhaoz\cpl\prototype\base\BaseManager;
-use luhaoz\cpl\prototype\method\types\Call;
 use luhaoz\cpl\prototype\method\types\Method;
 use luhaoz\cpl\prototype\property\base\BaseProperty;
+use luhaoz\cpl\prototype\property\interfaces\Hidden;
 use luhaoz\cpl\prototype\property\plugin\Filter;
 use luhaoz\cpl\prototype\property\types\Native;
 use luhaoz\cpl\prototype\property\types\Value;
-use luhaoz\cpl\prototype\traits\Prototype;
+use luhaoz\cpl\prototypeplugin\validate\ValidatePlugin;
 
 /**
  * Class PropertyManager
@@ -25,6 +25,7 @@ use luhaoz\cpl\prototype\traits\Prototype;
  * @method \luhaoz\cpl\prototype\property\plugin\filter\base\BaseFilter filter(\luhaoz\cpl\prototype\property\plugin\filter\base\BaseFilter $filter)
  * @method array values($values = null)
  * @method \Generator metas()
+ * @method \luhaoz\cpl\validate\ValidateResult validate()
  */
 class PropertyManager extends BaseManager implements \IteratorAggregate
 {
@@ -40,6 +41,7 @@ class PropertyManager extends BaseManager implements \IteratorAggregate
                     $this->prototype()->pubSubs()->emit('propertyInstantiate', [$instance]);
                 }
             };
+
             return $config;
         });
 
@@ -58,6 +60,7 @@ class PropertyManager extends BaseManager implements \IteratorAggregate
 
     /**
      * @param $name
+     *
      * @return Value
      */
     public function property($name)
@@ -78,10 +81,19 @@ class PropertyManager extends BaseManager implements \IteratorAggregate
                 }
                 $values = [];
                 foreach ($this->memberIterator() as $propertyName => $property) {
-                    if ($property instanceof BaseProperty) {
-                        $values[$propertyName] = $property->toData();
+                    if (!$property instanceof BaseProperty) {
+                        continue;
                     }
+                    if ($property instanceof \luhaoz\cpl\prototype\property\interfaces\Hidden) {
+                        continue;
+                    }
+                    $toData = $property->toData();
+                    if ($toData instanceof \luhaoz\cpl\prototype\property\base\Hidden) {
+                        continue;
+                    }
+                    $values[$propertyName] = $toData;
                 }
+
                 return $values;
             }],
         ]));
@@ -94,6 +106,7 @@ class PropertyManager extends BaseManager implements \IteratorAggregate
             }],
         ]));
         $prototype->plugins()->setup(Filter::PLUGIN_NAME, Dependence::dependenceConfig(Filter::class));
+        $prototype->plugins()->setup(ValidatePlugin::PLUGIN_NAME, Dependence::dependenceConfig(ValidatePlugin::class));
     }
 
     /**

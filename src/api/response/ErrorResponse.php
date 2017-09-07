@@ -9,7 +9,10 @@
 namespace luhaoz\cpl\api\response;
 
 use luhaoz\cpl\api\base\BaseResponse;
+use luhaoz\cpl\dependence\Dependence;
+use luhaoz\cpl\error\ErrorManager;
 use luhaoz\cpl\prototype\property\types\Value;
+use luhaoz\cpl\util\Util;
 
 /**
  * Class ErrorResponse
@@ -22,8 +25,19 @@ class ErrorResponse extends BaseResponse
     public function properties()
     {
         return [
-            'request_id' => [Value::class],
-            'errors'     => [Value::class],
+            'request_id' => Dependence::dependenceConfig(Value::class),
+            'errors'     => Dependence::dependenceConfig(Value::class),
         ];
+    }
+
+    public function errors($errors)
+    {
+        $errorDatas = [];
+        if ($errors instanceof ErrorManager) {
+            foreach ($errors->errrosIterator() as $error) {
+                $errorDatas[] = $error->toData();
+            }
+        }
+        $this->errors = $errorDatas;
     }
 }

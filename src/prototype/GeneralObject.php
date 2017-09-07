@@ -9,6 +9,8 @@
 
 namespace luhaoz\cpl\prototype;
 
+use luhaoz\cpl\dependence\Dependence;
+use luhaoz\cpl\prototype\property\types\Initial;
 use luhaoz\cpl\traits\BuildInstance;
 
 /**
@@ -19,13 +21,16 @@ class GeneralObject
 {
     use \luhaoz\cpl\prototype\traits\Prototype;
     use BuildInstance;
-    public $constructed = null;
 
     public function _constructed(\luhaoz\cpl\prototype\Prototype $prototype)
     {
-        if ($this->constructed !== null) {
-            call_user_func($this->constructed, $prototype);
-        }
+        $prototype->properties()->configs([
+            'constructed' => Dependence::dependenceConfig(Initial::class, [
+                'initial' => function ($value) use ($prototype) {
+                    call_user_func($value, [$prototype]);
+                },
+            ]),
+        ]);
     }
 
 }

@@ -25,6 +25,7 @@ class Filter extends BasePlugin
 
     /**
      * @param null $owner
+     *
      * @return \luhaoz\cpl\prototype\property\PropertyManager;
      */
     public function owner($owner = null)
@@ -46,6 +47,7 @@ class Filter extends BasePlugin
     public function __filter(BaseFilter $filter)
     {
         $filter->source($this);
+
         return $filter;
     }
 
@@ -60,10 +62,19 @@ class Filter extends BasePlugin
         }
         $values = [];
         foreach ($this->memberIterator() as $propertyName => $property) {
-            if ($property instanceof BaseProperty) {
-                $values[$propertyName] = $property->toData();
+            if (!$property instanceof BaseProperty) {
+                continue;
             }
+            if ($property instanceof \luhaoz\cpl\prototype\property\interfaces\Hidden) {
+                continue;
+            }
+            $toData = $property->toData();
+            if ($toData instanceof \luhaoz\cpl\prototype\property\base\Hidden) {
+                continue;
+            }
+            $values[$propertyName] = $toData;
         }
+
         return $values;
     }
 }

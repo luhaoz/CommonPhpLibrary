@@ -26,6 +26,7 @@ class ValidatePlugin extends BasePlugin
 
     /**
      * @param null $owner
+     *
      * @return \luhaoz\cpl\prototype\property\PropertyManager
      */
     public function owner($owner = null)
@@ -41,9 +42,11 @@ class ValidatePlugin extends BasePlugin
         ]));
     }
 
-    public function __propertyInstantiate(Value $property)
+    public function __propertyInstantiate($property)
     {
-        $property->prototype()->plugins()->setup(PropertyValidatePlugin::PLUGIN_NAME, Dependence::dependenceConfig(PropertyValidatePlugin::class));
+        if ($property instanceof Value) {
+            $property->prototype()->plugins()->setup(PropertyValidatePlugin::PLUGIN_NAME, Dependence::dependenceConfig(PropertyValidatePlugin::class));
+        }
     }
 
     public function __validate()
@@ -63,6 +66,7 @@ class ValidatePlugin extends BasePlugin
                 }
             }
         }
+
         return $validateResult;
     }
 
@@ -78,6 +82,7 @@ class ValidatePlugin extends BasePlugin
             $this->__validator = new ValidateManager();
             $this->__validator->configs($this->validator);
         }
+
         return $this->__validator;
     }
 }

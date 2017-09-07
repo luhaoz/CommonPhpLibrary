@@ -9,6 +9,7 @@
 namespace luhaoz\cpl\api\base;
 
 use luhaoz\cpl\api\plugin\ApiDoc;
+use luhaoz\cpl\api\response\GeneralResponse;
 use luhaoz\cpl\dependence\Dependence;
 use luhaoz\cpl\prototype\property\types\Value;
 use luhaoz\cpl\prototype\traits\Prototype;
@@ -43,10 +44,10 @@ class ApiDriver
     {
         return Arrays::merge([
             static::META_REQUEST  => Dependence::dependenceConfig(Request::class, [
-                'parameter' => [],
+                'parameters' => [],
             ]),
             static::META_RESPONSE => Dependence::dependenceConfig(Response::class, [
-                'parameter' => [],
+                'model' => Dependence::dependenceConfig(GeneralResponse::class),
             ]),
         ], $this->config());
     }

@@ -14,6 +14,7 @@ use luhaoz\cpl\prototype\method\types\Method;
 use luhaoz\cpl\prototype\property\base\BaseProperty;
 use luhaoz\cpl\prototype\traits\Prototype;
 use luhaoz\cpl\pubsub\traits\PubSub;
+use PhpParser\Node\Expr\Closure;
 
 /**
  * Class Value
@@ -32,10 +33,15 @@ class Value extends BaseProperty
     public function _constructed(\luhaoz\cpl\prototype\Prototype $prototype)
     {
         $prototype->properties()->configs([
-            'name'     => Dependence::dependenceConfig(BaseProperty::class),
-            'meta'     => Dependence::dependenceConfig(BaseProperty::class),
-            '__modfiy' => Dependence::dependenceConfig(BaseProperty::class),
-            'default'  => Dependence::dependenceConfig(BaseProperty::class),
+            'constructed' => Dependence::dependenceConfig(Initial::class, [
+                'initial' => function ($value) use ($prototype) {
+                    call_user_func($value, [$prototype]);
+                },
+            ]),
+            'name'        => Dependence::dependenceConfig(BaseProperty::class),
+            'meta'        => Dependence::dependenceConfig(BaseProperty::class),
+            '__modfiy'    => Dependence::dependenceConfig(BaseProperty::class),
+            'default'     => Dependence::dependenceConfig(BaseProperty::class),
         ]);
         $prototype->methods()->configs([
             'isEmpty'  => Dependence::dependenceConfig(Method::class, [
@@ -58,14 +64,20 @@ class Value extends BaseProperty
     public function get()
     {
         if ($this->isEmpty()) {
-            $this->prototypeSet($this->default);
+            $default = $this->default;
+            if ($default instanceof \Closure) {
+                $default = call_user_func($default,$this);
+            }
+            $this->prototypeSet($default);
         }
+
         return $this->prototypeGet();
     }
 
     public function set($value)
     {
         $this->__modfiy = true;
+
         return $this->prototypeSet($value);
     }
 }

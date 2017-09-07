@@ -10,8 +10,11 @@ namespace luhaoz\cpl\api\base;
 
 use luhaoz\cpl\dependence\Dependence;
 use luhaoz\cpl\prototype\property\plugin\filter\base\BaseFilter;
+use luhaoz\cpl\prototype\property\plugin\filter\TypeFilter;
+use luhaoz\cpl\prototype\property\types\Native;
 use luhaoz\cpl\prototype\property\types\Value;
 use luhaoz\cpl\prototype\traits\Prototype;
+use luhaoz\cpl\traits\BuildInstance;
 
 /**
  * Class BaseResponse
@@ -20,6 +23,7 @@ use luhaoz\cpl\prototype\traits\Prototype;
 class BaseResponse
 {
     use Prototype;
+    use BuildInstance;
     const RESPONSE_TYPE = '';
 
     protected function _constructed(\luhaoz\cpl\prototype\Prototype $prototype)
@@ -37,6 +41,10 @@ class BaseResponse
 
     public function toData()
     {
-        return $this->prototype()->properties()->filter(BaseFilter::instantiate())->values();
+        return $this->prototype()->properties()
+            ->filter(Dependence::instantiate(Dependence::dependenceConfig(TypeFilter::class, ['filter' => [
+                Native::class => false,
+            ]])))
+            ->values();
     }
 }
