@@ -17,7 +17,8 @@
   "require": {
     "php": ">=5.4.0",
     "ramsey/uuid": "^3.7",
-    "minime/annotations": "^3.0"
+    "minime/annotations": "^3.0",
+    "curl/curl": "^1.8"
   },
   "autoload": {
     "psr-4": {

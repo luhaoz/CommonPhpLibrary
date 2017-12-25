@@ -10,6 +10,8 @@
 namespace luhaoz\cpl\api\response;
 
 use luhaoz\cpl\api\base\BaseResponse;
+use luhaoz\cpl\dependence\Dependence;
+use luhaoz\cpl\prototype\property\plugin\filter\GeneralFilter;
 
 class GeneralResponse extends BaseResponse
 {
@@ -28,5 +30,16 @@ class GeneralResponse extends BaseResponse
     public function properties()
     {
         return $this->properties;
+    }
+
+    public function toData()
+    {
+        return $this->prototype()->properties()
+            ->filter(Dependence::instantiate(Dependence::dependenceConfig(GeneralFilter::class, [
+                'validFilter' => function ($propertie) {
+                    return in_array($propertie->name, ['properties', 'constructed']) == false;
+                },
+            ])))
+            ->values();
     }
 }
